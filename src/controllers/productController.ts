@@ -117,3 +117,27 @@ export async function deleteProductById(req: Request, res: Response) {
     await disconnect();
   }
 }
+
+/**
+ * Get specific product by id
+ * @param req
+ * @param res
+ */
+export async function getProductByQuery(req: Request, res: Response) {
+  const key = req.params.key;
+  const val = req.params.val;
+
+  try {
+    await connect();
+
+    const result = await productModel.find({
+      [key]: { $regex: val, $options: "i" },
+    });
+
+    res.status(200).send(result);
+  } catch {
+    res.status(500).send("Error retrieving product with id=" + req.params.id);
+  } finally {
+    await disconnect();
+  }
+}

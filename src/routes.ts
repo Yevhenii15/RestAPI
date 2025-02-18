@@ -5,6 +5,7 @@ import {
   getProductById,
   updateProductById,
   deleteProductById,
+  getProductByQuery,
 } from "./controllers/productController";
 
 const router: Router = Router();
@@ -18,6 +19,7 @@ router.get("/", (req: Request, res: Response) => {
 router.post("/products", createProduct);
 router.get("/products", getAllProducts);
 router.get("/products/:id", getProductById);
+router.get("/products/query/:key/:val", getProductByQuery);
 router.put("/products/:id", updateProductById);
 router.delete("/products/:id", deleteProductById);
 
