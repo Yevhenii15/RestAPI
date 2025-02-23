@@ -8,6 +8,12 @@ import {
   getProductByQuery,
 } from "./controllers/productController";
 
+import {
+  registerUser,
+  loginUser,
+  verifyToken,
+} from "./controllers/authController";
+
 const router: Router = Router();
 
 // get, post, put, delete (CRUD)
@@ -21,6 +27,10 @@ router.get("/products", getAllProducts);
 router.get("/products/:id", getProductById);
 router.get("/products/query/:key/:val", getProductByQuery);
 router.put("/products/:id", updateProductById);
-router.delete("/products/:id", deleteProductById);
+router.delete("/products/:id", verifyToken, deleteProductById);
+
+// Auth routes
+router.post("/user/register", registerUser);
+router.post("/user/login", loginUser);
 
 export default router;
