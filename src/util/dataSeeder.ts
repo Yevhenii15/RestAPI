@@ -2,6 +2,7 @@ import mongoose from "mongoose";
 import { userModel } from "../models/userModel";
 import { productModel } from "../models/productModel";
 import dotenv from "dotenv";
+import { faker } from "@faker-js/faker";
 
 dotenv.config();
 
@@ -18,45 +19,25 @@ const seedData = async () => {
     console.log("Existing data cleared");
 
     // Seed users
-    const users = await userModel.insertMany([
-      {
-        name: "John Doe",
-        email: "john@example.com",
-        password: "hashedpassword",
-        registerDate: new Date(),
-      },
-      {
-        name: "Jane Smith",
-        email: "jane@example.com",
-        password: "hashedpassword",
-        registerDate: new Date(),
-      },
-    ]);
+    const user1 = new userModel();
+    user1.name = faker.person.fullName();
+    user1.email = faker.internet.email();
+    user1.password = faker.internet.password();
+    await user1.save();
     console.log("Users seeded");
 
     // Seed products
     await productModel.insertMany([
       {
-        name: "Sample Product 1",
-        description: "This is a sample product.",
-        imageURL: "https://example.com/image1.jpg",
-        price: 29.99,
-        stock: 100,
-        isOnDiscount: true,
-        discountPct: 10,
+        name: faker.commerce.productName(),
+        description: faker.commerce.productDescription(),
+        imageURL: "https://picsum.photos/500/500",
+        price: faker.commerce.price({ min: 5, max: 5000 }),
+        stock: faker.number.int({ min: 0, max: 200 }),
+        isOnDiscount: faker.datatype.boolean(0.5),
+        discountPct: faker.number.int({ min: 0, max: 100 }),
         isHidden: false,
-        _createdBy: users[0].id,
-      },
-      {
-        name: "Sample Product 2",
-        description: "Another product example.",
-        imageURL: "https://example.com/image2.jpg",
-        price: 49.99,
-        stock: 50,
-        isOnDiscount: false,
-        discountPct: 0,
-        isHidden: false,
-        _createdBy: users[1].id,
+        _createdBy: user1.id,
       },
     ]);
     console.log("Products seeded");
